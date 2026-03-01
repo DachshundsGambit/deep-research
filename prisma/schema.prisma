@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Paper {
+  id               String    @id @default(cuid())
+  externalId       String
+  source           String    // arxiv | semantic_scholar | pubmed | ssrn
+  doi              String?
+  title            String
+  authors          String[]
+  abstract         String
+  url              String
+  pdfUrl           String?
+  publishedAt      DateTime
+  topicSlug        String
+  sourceCategories String[]
+  citationCount    Int       @default(0)
+  aiSummary        String?
+  aiScore          Int?
+  aiProcessedAt    DateTime?
+  createdAt        DateTime  @default(now())
+  digest           Digest?   @relation(fields: [digestId], references: [id])
+  digestId         String?
+
+  @@unique([source, externalId])
+  @@index([topicSlug, aiScore(sort: Desc)])
+  @@index([doi])
+  @@index([digestId])
+}
+
+model Digest {
+  id          String    @id @default(cuid())
+  weekOf      DateTime  @unique
+  status      String    @default("pending") // pending | fetching | processing | published
+  paperCount  Int       @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  papers      Paper[]
+}
+
+model FetchLog {
+  id         String   @id @default(cuid())
+  digestId   String?
+  source     String
+  topic      String?
+  status     String   // success | error
+  papersFound Int     @default(0)
+  papersNew   Int     @default(0)
+  error      String?
+  durationMs Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([digestId])
+}
