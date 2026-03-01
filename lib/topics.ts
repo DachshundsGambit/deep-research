@@ -45,6 +45,15 @@ export const TOPICS: Topic[] = [
     pubmedTerms: [],
     ssrnNetworks: [],
   },
+  {
+    slug: 'defense-tech',
+    name: 'Defense Technology',
+    description: 'Autonomous systems, hypersonics, electronic warfare, C4ISR, and defense applications',
+    arxivCategories: ['cs.RO', 'cs.MA', 'eess.SP', 'cs.SY', 'eess.SY'],
+    semanticScholarFields: ['Engineering', 'Computer Science'],
+    pubmedTerms: [],
+    ssrnNetworks: [],
+  },
 ]
 
 export const TOPIC_MAP = Object.fromEntries(TOPICS.map((t) => [t.slug, t]))
