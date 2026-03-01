@@ -6,7 +6,7 @@ import { fetchPapersForTopic } from '@/lib/pipeline/fetcher'
 
 export const maxDuration = 60
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   // Verify cron secret
   const authHeader = req.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
