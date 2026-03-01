@@ -11,7 +11,7 @@ interface RankingResult {
   summary: string
 }
 
-export async function rankPapersForTopic(topicSlug: string, digestId: string) {
+export async function rankPapersForTopic(topicSlug: string, digestId: string, maxPapers?: number) {
   // Get unprocessed papers for this topic
   const papers = await prisma.paper.findMany({
     where: {
@@ -25,11 +25,19 @@ export async function rankPapersForTopic(topicSlug: string, digestId: string) {
       title: true,
       abstract: true,
     },
+    ...(maxPapers ? { take: maxPapers } : {}),
   })
 
   if (papers.length === 0) {
-    return { processed: 0, errors: 0 }
+    return { processed: 0, errors: 0, remaining: 0 }
   }
+
+  // Count total remaining (including current batch)
+  const totalUnprocessed = maxPapers
+    ? await prisma.paper.count({
+        where: { digestId, topicSlug, aiProcessedAt: null },
+      })
+    : papers.length
 
   const batches = chunk(papers, BATCH_SIZE)
   let processed = 0
@@ -81,5 +89,6 @@ export async function rankPapersForTopic(topicSlug: string, digestId: string) {
     }
   }
 
-  return { processed, errors }
+  const remaining = totalUnprocessed - processed
+  return { processed, errors, remaining }
 }

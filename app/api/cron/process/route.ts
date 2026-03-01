@@ -37,7 +37,8 @@ export async function GET(req: NextRequest) {
       data: { status: 'processing' },
     })
 
-    const result = await rankPapersForTopic(topicSlug, digest.id)
+    // Process up to 36 papers per invocation to stay within 60s limit
+    const result = await rankPapersForTopic(topicSlug, digest.id, 36)
 
     // Check if all topics are now processed
     const allTopicSlugs = TOPICS.map((t) => t.slug)
@@ -66,6 +67,8 @@ export async function GET(req: NextRequest) {
       topic: topicSlug,
       ...result,
       digestStatus: unprocessedCount === 0 ? 'published' : 'processing',
+      remaining: result.remaining,
+      unprocessedTotal: unprocessedCount,
     })
   } catch (err) {
     console.error('Cron process error:', err)
