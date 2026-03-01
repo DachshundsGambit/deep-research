@@ -37,8 +37,8 @@ export async function GET(req: NextRequest) {
       data: { status: 'processing' },
     })
 
-    // Process up to 36 papers per invocation to stay within 60s limit
-    const result = await rankPapersForTopic(topicSlug, digest.id, 36)
+    // Process up to 12 papers (1 batch) per invocation to stay within 60s limit
+    const result = await rankPapersForTopic(topicSlug, digest.id, 12)
 
     // Check if all topics are now processed
     const allTopicSlugs = TOPICS.map((t) => t.slug)
