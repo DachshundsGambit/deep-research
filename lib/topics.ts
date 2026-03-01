@@ -54,6 +54,15 @@ export const TOPICS: Topic[] = [
     pubmedTerms: [],
     ssrnNetworks: [],
   },
+  {
+    slug: 'music-ai',
+    name: 'Music & Audio AI',
+    description: 'AI music generation, sound synthesis, audio signal processing, and music production technology',
+    arxivCategories: ['cs.SD', 'eess.AS', 'cs.MM'],
+    semanticScholarFields: ['Computer Science', 'Engineering'],
+    pubmedTerms: [],
+    ssrnNetworks: [],
+  },
 ]
 
 export const TOPIC_MAP = Object.fromEntries(TOPICS.map((t) => [t.slug, t]))

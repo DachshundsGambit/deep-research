@@ -41,6 +41,14 @@
       "schedule": "20 7 * * 1"
     },
     {
+      "path": "/api/cron/fetch?topic=music-ai",
+      "schedule": "25 6 * * 1"
+    },
+    {
+      "path": "/api/cron/process?topic=music-ai",
+      "schedule": "25 7 * * 1"
+    },
+    {
       "path": "/api/cron/cleanup",
       "schedule": "0 8 * * 1"
     }
