@@ -21,7 +21,7 @@ export default async function TopicPage({ params }: { params: { slug: string } }
     },
     orderBy: { digest: { weekOf: 'desc' } },
     select: { summary: true },
-  })
+  }).catch(() => null)
 
   return (
     <div>
