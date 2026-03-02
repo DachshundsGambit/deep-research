@@ -63,6 +63,15 @@ export const TOPICS: Topic[] = [
     pubmedTerms: [],
     ssrnNetworks: [],
   },
+  {
+    slug: 'longevity',
+    name: 'Longevity & Health',
+    description: 'Aging biology, healthspan extension, senolytics, caloric restriction, biomarkers of aging, and preventive medicine',
+    arxivCategories: ['q-bio.CB', 'q-bio.MN', 'q-bio.TO'],
+    semanticScholarFields: ['Medicine', 'Biology'],
+    pubmedTerms: ['longevity', 'aging reversal', 'senolytics', 'healthspan', 'caloric restriction', 'biomarkers of aging'],
+    ssrnNetworks: [],
+  },
 ]
 
 export const TOPIC_MAP = Object.fromEntries(TOPICS.map((t) => [t.slug, t]))
