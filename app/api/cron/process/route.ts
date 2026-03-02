@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db'
 import { getMonday } from '@/lib/utils'
 import { TOPICS, TOPIC_MAP } from '@/lib/topics'
 import { rankPapersForTopic } from '@/lib/pipeline/ranker'
+import { generateTopicSummary } from '@/lib/pipeline/summarizer'
 import { revalidatePath } from 'next/cache'
 
 export const maxDuration = 60
@@ -39,6 +40,15 @@ export async function GET(req: NextRequest) {
 
     // Process up to 12 papers (1 batch) per invocation to stay within 60s limit
     const result = await rankPapersForTopic(topicSlug, digest.id, 12)
+
+    // Generate topic summary if this topic is fully processed
+    if (result.remaining === 0) {
+      try {
+        await generateTopicSummary(topicSlug, digest.id)
+      } catch (err) {
+        console.error(`Topic summary generation error for ${topicSlug}:`, err)
+      }
+    }
 
     // Check if all topics are now processed
     const allTopicSlugs = TOPICS.map((t) => t.slug)

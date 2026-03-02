@@ -34,13 +34,25 @@ model Paper {
 }
 
 model Digest {
-  id          String    @id @default(cuid())
-  weekOf      DateTime  @unique
-  status      String    @default("pending") // pending | fetching | processing | published
-  paperCount  Int       @default(0)
-  publishedAt DateTime?
-  createdAt   DateTime  @default(now())
-  papers      Paper[]
+  id             String         @id @default(cuid())
+  weekOf         DateTime       @unique
+  status         String         @default("pending") // pending | fetching | processing | published
+  paperCount     Int            @default(0)
+  publishedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  papers         Paper[]
+  topicSummaries TopicSummary[]
+}
+
+model TopicSummary {
+  id        String   @id @default(cuid())
+  digestId  String
+  topicSlug String
+  summary   String
+  createdAt DateTime @default(now())
+  digest    Digest   @relation(fields: [digestId], references: [id])
+
+  @@unique([digestId, topicSlug])
 }
 
 model FetchLog {
